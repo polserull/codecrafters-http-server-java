@@ -69,6 +69,7 @@ class sockThread extends Thread {
       }
       if (re[1].startsWith("/files/")){
         String fi = re[1].replaceFirst("/files/", "");
+        System.out.println(dir);
         if(Files.exists(Path.of(dir + "/" + fi))) {
           File file = new File(dir + "/" + fi);
           BufferedReader fin = new BufferedReader(new FileReader(file));

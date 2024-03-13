@@ -51,7 +51,7 @@ class sockThread extends Thread {
 
       String inr;
       List<String> inp = new ArrayList<String>();
-      while ((inr = bif.readLine()) != null && !inr.isEmpty()) {
+      while ((inr = bif.readLine()) != null) {
         inp.add(inr);
       }
 

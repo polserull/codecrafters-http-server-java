@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,14 +11,19 @@ public class Main {
   public static void main(String[] args) {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
     System.out.println("Logs from your program will appear here!");
-
     Socket clientSocket = null;
+
+    String dir = null;
+    if((args.length == 1) && args[0].equals("--directory"))
+    {
+      dir = args[1];
+    }
 
     try (ServerSocket serverSocket = new ServerSocket(4221)) {
       while(true) {
         serverSocket.setReuseAddress(true);
         clientSocket = serverSocket.accept();
-        sockThread Tsock = new sockThread(clientSocket);
+        sockThread Tsock = new sockThread(clientSocket, dir);
         Tsock.start();
       }
 
@@ -29,8 +36,10 @@ public class Main {
 
 class sockThread extends Thread {
   private Socket sock;
-  public sockThread(Socket sock) {
+  private String dir;
+  public sockThread(Socket sock, String dir) {
     this.sock = sock;
+    this.dir = dir;
   }
 
   @Override
@@ -57,6 +66,14 @@ class sockThread extends Thread {
       if (re[1].equals("/user-agent")) {
         String[] ua = inp.get(2).split(" ");
         sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + ua[1].length() + "\r\n\r\n" + ua[1]);
+      }
+      if (re[1].startsWith("/files/") && dir != null){
+        String fi = re[1].replaceFirst("/files/", "");
+        if(Files.exists(Path.of(dir + "/" + fi))) {
+          File file = new File(dir + "/" + fi);
+          BufferedReader fin = new BufferedReader(new FileReader(file));
+          sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: " + fin.readLine().length() + "\r\n\r\n" + fin.readLine());
+        }
       } else {
         sendCode(sock, "HTTP/1.1 404 Not Found\r\n\r\n");
       }

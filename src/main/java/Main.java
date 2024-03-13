@@ -68,12 +68,14 @@ class sockThread extends Thread {
         sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + ua[1].length() + "\r\n\r\n" + ua[1]);
       }
       if (re[1].startsWith("/files/")){
-        System.out.println("a");
         String fi = re[1].replaceFirst("/files/", "");
         if(Files.exists(Path.of(dir + "/" + fi))) {
           File file = new File(dir + "/" + fi);
           BufferedReader fin = new BufferedReader(new FileReader(file));
           sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: " + fin.readLine().length() + "\r\n\r\n" + fin.readLine());
+        } else
+        {
+          sendCode(sock, "HTTP/1.1 404 Not Found\r\n\r\n");
         }
       } else {
         sendCode(sock, "HTTP/1.1 404 Not Found\r\n\r\n");

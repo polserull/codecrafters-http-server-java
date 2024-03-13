@@ -23,6 +23,7 @@ public class Main {
 
       if (re[1].equals("/")) {
         sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
+      } else {
         if(re[1].equals("/echo/")) {
           String ec = re[1].replaceFirst("/echo/", "");
           sendCode(clientSocket, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent Length: "+re[1].length()+"\r\n\r\n"+ec);
@@ -30,8 +31,6 @@ public class Main {
         {
           sendCode(clientSocket, "HTTP/1.1 404 Not Found\r\n\r\n");
         }
-      } else {
-        sendCode(clientSocket, "HTTP/1.1 404 Not Found\r\n\r\n");
       }
 
       System.out.println("accepted new connection");

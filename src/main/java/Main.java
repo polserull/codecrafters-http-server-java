@@ -49,13 +49,13 @@ class sockThread extends Thread {
       InputStream in = sock.getInputStream();
       BufferedReader bif = new BufferedReader(new InputStreamReader(in));
 
+      System.out.println(bif.lines());
       String inr;
       List<String> inp = new ArrayList<String>();
-      while ((inr = bif.readLine()) != null) {
+      while ((inr = bif.readLine()) != null && !inr.isEmpty()) {
+        System.out.println(inr);
         inp.add(inr);
       }
-
-      System.out.println(inp);
 
       String[] re = inp.get(0).split(" ");
 

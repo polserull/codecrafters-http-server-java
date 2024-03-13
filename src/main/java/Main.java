@@ -22,6 +22,12 @@ public class Main {
       String[] re = inr.split(" ");
       String[] rc = re[1].split("/");
 
+      if (re[1].equals("/")) {
+        sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
+      } else {
+        sendCode(clientSocket, "HTTP/1.1 404 Not Found\r\n\r\n");
+      }
+
       if(rc[0].equals("echo")) {
         sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\nContent-Type: text/plain\r\n\r\nContent Length: "+rc[1].length()+"\r\n\r\n"+rc[1]);
       } else

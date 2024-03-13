@@ -76,6 +76,10 @@ class sockThread extends Thread {
         } else if (Objects.equals(re[0], "POST")) {
           File file = new File(dir + "/" + fi);
           if(file.createNewFile()) {
+            for (int i = 0; inp.size() > i; i++)
+            {
+              System.out.println(inp.get(i));
+            }
             FileWriter write = new FileWriter(dir + "/" + fi);
             write.write(inp.get(2));
             write.close();

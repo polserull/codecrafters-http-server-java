@@ -77,9 +77,11 @@ class sockThread extends Thread {
           System.out.println(inp);
           File file = new File(dir + "/" + fi);
           if(file.createNewFile()) {
-            FileWriter write = new FileWriter(dir + "/" + fi);
-            write.write(inp.get(3));
-            write.close();
+            String[] lengt = inp.get(3).split(" ");
+            char[] bc = new char[Integer.parseInt(lengt[1])];
+            bif.read(bc, 0, Integer.parseInt(lengt[1]));
+            String bd = new String(bc);
+            Files.write(Path.of(dir + "/" + fi), bd.getBytes());
             sendCode(sock, "HTTP/1.1 201 OK\r\n\r\n");
           }
         }

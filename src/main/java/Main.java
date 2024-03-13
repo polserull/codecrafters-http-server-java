@@ -47,9 +47,8 @@ class sockThread extends Thread {
   public void run() {
     try {
       InputStream in = sock.getInputStream();
-      BufferedReader bif = new BufferedReader(new InputStreamReader(in));
+      BufferedReader bif = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
-      System.out.println(new InputStreamReader(in).read());
       String inr;
       List<String> inp = new ArrayList<String>();
       while ((inr = bif.readLine()) != null && !inr.isEmpty()) {

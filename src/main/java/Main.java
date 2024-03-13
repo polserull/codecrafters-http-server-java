@@ -22,7 +22,7 @@ public class Main {
       OutputStream out = clientSocket.getOutputStream();
       String[] msg = in.toString().split(" ");
 
-      if ("/".equals(msg[1])) {
+      if (msg[1] != null && "/".equals(msg[1])) {
         out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
         out.flush();
         out.close();

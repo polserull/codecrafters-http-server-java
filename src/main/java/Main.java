@@ -77,10 +77,7 @@ class sockThread extends Thread {
           File file = new File(dir + "/" + fi);
           if(file.createNewFile()) {
             FileWriter write = new FileWriter(dir + "/" + fi);
-            write.write(inp.get(3));
-            for (String s : inp) {
-              System.out.println(s);
-            }
+            write.write(inp.get(2));
             write.close();
             sendCode(sock, "HTTP/1.1 201 OK\r\n\r\n");
           }

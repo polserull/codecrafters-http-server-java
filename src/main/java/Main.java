@@ -55,6 +55,8 @@ class sockThread extends Thread {
         inp.add(inr);
       }
 
+      System.out.println(inp);
+
       String[] re = inp.get(0).split(" ");
 
       if (re[1].equals("/")) {

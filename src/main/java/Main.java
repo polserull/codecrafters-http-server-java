@@ -19,12 +19,17 @@ public class Main {
       clientSocket = serverSocket.accept(); // Wait for connection from client.
       sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
       InputStream in = clientSocket.getInputStream();
+      OutputStream out = clientSocket.getOutputStream();
       String[] msg = in.toString().split(" ");
 
       if ("/".equals(msg[1])) {
-        sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
+        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+        out.flush();
+        out.close();
       } else {
-        sendCode(clientSocket, "HTTP/1.1 404 Not Found\r\n\r\n");
+        out.write("HTTP/1.1 404 Not Found\r\n\r\n".getBytes());
+        out.flush();
+        out.close();
       }
 
       System.out.println("accepted new connection");

@@ -21,10 +21,7 @@ public class Main {
       InputStream in = clientSocket.getInputStream();
       String[] msg = in.toString().split(" ");
 
-      System.out.println(msg[1]);
-      System.out.println(Objects.equals(msg[1], "/"));
-
-      if (Objects.equals(msg[1], "/")) {
+      if (msg[1].equals("/")) {
         sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
       } else {
         sendCode(clientSocket, "HTTP/1.1 404 Not Found\r\n\r\n");

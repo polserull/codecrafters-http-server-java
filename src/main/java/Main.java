@@ -10,43 +10,60 @@ public class Main {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
     System.out.println("Logs from your program will appear here!");
 
-    ServerSocket serverSocket = null;
     Socket clientSocket = null;
 
-    try {
-      serverSocket = new ServerSocket(4221);
-      serverSocket.setReuseAddress(true);
-      clientSocket = serverSocket.accept(); // Wait for connection from client.
+    try (ServerSocket serverSocket = new ServerSocket(4221)) {
+      while(true) {
+        serverSocket.setReuseAddress(true);
+        clientSocket = serverSocket.accept();
+        sockThread Tsock = new sockThread(clientSocket);
+        Tsock.start();
+      }
 
-      InputStream in = clientSocket.getInputStream();
+
+    } catch (IOException e) {
+      System.out.println("IOException: " + e.getMessage());
+    }
+  }
+}
+
+class sockThread extends Thread {
+  private Socket sock;
+  public sockThread(Socket sock) {
+    this.sock = sock;
+  }
+
+  @Override
+  public void run() {
+    try {
+      InputStream in = sock.getInputStream();
       BufferedReader bif = new BufferedReader(new InputStreamReader(in));
 
       String inr;
       List<String> inp = new ArrayList<String>();
-      while((inr = bif.readLine()) != null && !inr.isEmpty()) {
+      while ((inr = bif.readLine()) != null && !inr.isEmpty()) {
         inp.add(inr);
       }
 
       String[] re = inp.get(0).split(" ");
 
       if (re[1].equals("/")) {
-        sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
+        sendCode(sock, "HTTP/1.1 200 OK\r\n\r\n");
       }
-      if(re[1].startsWith("/echo/")) {
+      if (re[1].startsWith("/echo/")) {
         String ec = re[1].replaceFirst("/echo/", "");
-        sendCode(clientSocket, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+ec.length()+"\r\n\r\n"+ec);
+        sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + ec.length() + "\r\n\r\n" + ec);
       }
       if (re[1].equals("/user-agent")) {
         String[] ua = inp.get(2).split(" ");
-        sendCode(clientSocket, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+ua[1].length()+"\r\n\r\n"+ua[1]);
-      } else
-      {
-        sendCode(clientSocket, "HTTP/1.1 404 Not Found\r\n\r\n");
+        sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + ua[1].length() + "\r\n\r\n" + ua[1]);
+      } else {
+        sendCode(sock, "HTTP/1.1 404 Not Found\r\n\r\n");
       }
 
       System.out.println("accepted new connection");
     } catch (IOException e) {
-      System.out.println("IOException: " + e.getMessage());
+      e.printStackTrace();
     }
   }
 

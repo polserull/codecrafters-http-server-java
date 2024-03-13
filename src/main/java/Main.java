@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -70,9 +71,7 @@ class sockThread extends Thread {
       if (re[1].startsWith("/files/")){
         String fi = re[1].replaceFirst("/files/", "");
         if(Files.exists(Path.of(dir + "/" + fi))) {
-          FileInputStream file = new FileInputStream(dir + "/" + fi);
-          String cc = file.toString();
-          System.out.println(cc);
+          String cc = Files.readString(Path.of(dir + "/" + fi));
           sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: " + cc.length() + "\r\n\r\n" + cc);
         } else
         {

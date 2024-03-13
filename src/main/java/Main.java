@@ -74,12 +74,11 @@ class sockThread extends Thread {
           String cc = Files.readString(Path.of(dir + "/" + fi));
           sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: " + cc.length() + "\r\n\r\n" + cc);
         } else if (Objects.equals(re[0], "POST")) {
-          sendCode(sock, "HTTP/1.1 201 OK\r\n\r\n");
-          File file = new File(dir + "/" + fi);
           System.out.println(inp);
+          File file = new File(dir + "/" + fi);
           if(file.createNewFile()) {
             FileWriter write = new FileWriter(dir + "/" + fi);
-            write.write(inp.get(4));
+            write.write(inp.get(5));
             write.close();
             sendCode(sock, "HTTP/1.1 201 OK\r\n\r\n");
           }

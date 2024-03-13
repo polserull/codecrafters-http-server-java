@@ -70,7 +70,6 @@ class sockThread extends Thread {
       }
       if (re[1].startsWith("/files/")){
         String fi = re[1].replaceFirst("/files/", "");
-        String[] co = inp.get(2).split(" ");
         if(Objects.equals(re[0], "GET") && Files.exists(Path.of(dir + "/" + fi))) {
           String cc = Files.readString(Path.of(dir + "/" + fi));
           sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: " + cc.length() + "\r\n\r\n" + cc);
@@ -78,7 +77,7 @@ class sockThread extends Thread {
           File file = new File(dir + "/" + fi);
           if(file.createNewFile()) {
             FileWriter write = new FileWriter(dir + "/" + fi);
-            write.write(co[1]);
+            write.write(inp.get(4));
             write.close();
             sendCode(sock, "HTTP/1.1 201 OK\r\n\r\n");
           }

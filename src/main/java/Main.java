@@ -1,7 +1,9 @@
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Objects;
 
 public class Main {
   public static void main(String[] args) {
@@ -16,6 +18,15 @@ public class Main {
       serverSocket.setReuseAddress(true);
       clientSocket = serverSocket.accept(); // Wait for connection from client.
       sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
+      InputStream in = clientSocket.getInputStream();
+      String[] msg = in.toString().split(" ");
+      if (Objects.equals(msg[0], "GET")) { // GET REQUEST
+        if (Objects.equals(msg[1], "/")) {
+          sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
+        } else {
+          sendCode(clientSocket, "HTTP/1.1 404 Not Found\r\n\r\n");
+        }
+      }
       System.out.println("accepted new connection");
     } catch (IOException e) {
       System.out.println("IOException: " + e.getMessage());

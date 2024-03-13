@@ -72,7 +72,7 @@ class sockThread extends Thread {
         if(Files.exists(Path.of(dir + "/" + fi))) {
           File file = new File(dir + "/" + fi);
           BufferedReader fin = new BufferedReader(new FileReader(file));
-          sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: " + fin.readLine().length() + "\r\n\r\n" + fin.readLine());
+          sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: " + fi.length() + "\r\n\r\n" + fin.readLine());
         } else
         {
           sendCode(sock, "HTTP/1.1 404 Not Found\r\n\r\n");

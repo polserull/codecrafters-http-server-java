@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Main {
@@ -18,8 +20,14 @@ public class Main {
 
       InputStream in = clientSocket.getInputStream();
       BufferedReader bif = new BufferedReader(new InputStreamReader(in));
-      String inr = bif.readLine();
-      String[] re = inr.split(" ");
+
+      String inr;
+      List<String> inp = new ArrayList<String>();
+      while((inr = bif.readLine()) != null && !inr.isEmpty()) {
+        inp.add(inr);
+      }
+
+      String[] re = inp.get(0).split(" ");
 
       if (re[1].equals("/")) {
         sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
@@ -27,6 +35,10 @@ public class Main {
       if(re[1].startsWith("/echo/")) {
         String ec = re[1].replaceFirst("/echo/", "");
         sendCode(clientSocket, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+ec.length()+"\r\n\r\n"+ec);
+      }
+      if (re[1].equals("/user-agent")) {
+        String[] ua = inp.get(2).split(" ");
+        sendCode(clientSocket, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: "+ua[1].length()+"\r\n\r\n"+ua[1]);
       } else
       {
         sendCode(clientSocket, "HTTP/1.1 404 Not Found\r\n\r\n");

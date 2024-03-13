@@ -17,7 +17,7 @@ public class Main {
       serverSocket = new ServerSocket(4221);
       serverSocket.setReuseAddress(true);
       clientSocket = serverSocket.accept(); // Wait for connection from client.
-      sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
+      //sendCode(clientSocket, "HTTP/1.1 200 OK\r\n\r\n");
       InputStream in = clientSocket.getInputStream();
       String[] msg = in.toString().split(" ");
       if (Objects.equals(msg[0], "GET")) { // GET REQUEST

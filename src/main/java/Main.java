@@ -72,6 +72,7 @@ class sockThread extends Thread {
         if(Files.exists(Path.of(dir + "/" + fi))) {
           FileInputStream file = new FileInputStream(dir + "/" + fi);
           String cc = file.toString();
+          System.out.println(cc);
           sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: " + cc.length() + "\r\n\r\n" + cc);
         } else
         {

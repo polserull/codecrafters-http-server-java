@@ -68,6 +68,7 @@ class sockThread extends Thread {
         sendCode(sock, "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + ua[1].length() + "\r\n\r\n" + ua[1]);
       }
       if (re[1].startsWith("/files/") && dir != null){
+        System.out.println("a");
         String fi = re[1].replaceFirst("/files/", "");
         if(Files.exists(Path.of(dir + "/" + fi))) {
           File file = new File(dir + "/" + fi);

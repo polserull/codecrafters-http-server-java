@@ -76,9 +76,10 @@ class sockThread extends Thread {
         } else if (Objects.equals(re[0], "POST")) {
           sendCode(sock, "HTTP/1.1 201 OK\r\n\r\n");
           File file = new File(dir + "/" + fi);
+          System.out.println(inp);
           if(file.createNewFile()) {
             FileWriter write = new FileWriter(dir + "/" + fi);
-            write.write(inp.get(0));
+            write.write(inp.get(4));
             write.close();
             sendCode(sock, "HTTP/1.1 201 OK\r\n\r\n");
           }
